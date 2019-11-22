@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/noqu-board/static/css/main.cf102f81.chunk.css",
+    "main.js": "/noqu-board/static/js/main.8458869b.chunk.js",
+    "main.js.map": "/noqu-board/static/js/main.8458869b.chunk.js.map",
+    "runtime-main.js": "/noqu-board/static/js/runtime-main.a3f6a1d9.js",
+    "runtime-main.js.map": "/noqu-board/static/js/runtime-main.a3f6a1d9.js.map",
+    "static/js/2.ea1abf9a.chunk.js": "/noqu-board/static/js/2.ea1abf9a.chunk.js",
+    "static/js/2.ea1abf9a.chunk.js.map": "/noqu-board/static/js/2.ea1abf9a.chunk.js.map",
+    "index.html": "/noqu-board/index.html",
+    "precache-manifest.91c693d260c3a01de57f8339d68c7e1e.js": "/noqu-board/precache-manifest.91c693d260c3a01de57f8339d68c7e1e.js",
+    "service-worker.js": "/noqu-board/service-worker.js",
+    "static/css/main.cf102f81.chunk.css.map": "/noqu-board/static/css/main.cf102f81.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a3f6a1d9.js",
+    "static/js/2.ea1abf9a.chunk.js",
+    "static/css/main.cf102f81.chunk.css",
+    "static/js/main.8458869b.chunk.js"
+  ]
+}
