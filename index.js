@@ -4,16 +4,16 @@ const path = require("path");
 const sender = require("./src/metrics");
 const { init } = require("./src/config/socket");
 
-module.exports = function(app, prefix, authenticator) {
+module.exports = function(app, prefix, queues, authenticator) {
   const reactAppPrefix = "/noqu-board";
   if (prefix === reactAppPrefix) {
     throw new Error("Invalid prefix, please change it.");
   }
   router.get("/", function(req, res) {
-    // Call ocket singleton
+    // Call socket singleton
     init(req.socket.server);
     // Init metric sender
-    sender();
+    sender(queues);
     // Response with noqu-board build
     res.sendFile(path.join(__dirname + "/src/board/index.html"));
   });

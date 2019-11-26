@@ -6,15 +6,18 @@ const socketIo = require("socket.io");
 // *** Handlers ***
 function handleSendSytemMetric(data) {
   // brodcast event system-met
-  console.log("brodcast system-met", data);
+  // console.log("brodcast system-met", data);
   io.emit("system-met", data);
 }
-function handleSendBullMetric() {
+function handleSendBullMetric(data) {
   // brodcast event bull-met
+  console.log("brodcast bull-met", data);
+  io.emit("bull-met", data);
 }
 
 const socketEvents = {
-  "system-met": handleSendSytemMetric
+  "system-met": handleSendSytemMetric,
+  "bull-met": handleSendBullMetric
 };
 
 let io;
