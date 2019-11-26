@@ -6,7 +6,12 @@ const jobTypes = [
   "delayed",
   "paused"
 ];
+const pollTypes = {
+  SYSTEM: "system-met",
+  BULL: "bull-met"
+};
 
 module.exports = {
-  jobTypes
+  jobTypes,
+  pollTypes
 };

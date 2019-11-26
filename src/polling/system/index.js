@@ -1,14 +1,16 @@
 const { totalmem, cpus } = require("os");
 const pidusage = require("pidusage");
+const { pollTypes } = require("../../lib/constants");
 
-module.exports = function(callback) {
+function sysUsagePolling(io) {
   try {
     const interval = setInterval(() => {
       pidusage(process.pid, (err, { cpu, memory }) => {
         const cpuModel = cpus()[0].model;
         const mem = (memory / 1024 / 1024).toFixed(2);
         const totalMem = (totalmem / 1024 / 1024).toFixed(2);
-        callback({ cpu, cpuModel, mem, totalMem });
+        const data = { cpu, cpuModel, mem, totalMem };
+        io.emit(pollTypes.SYSTEM, data);
       });
       pidusage.clear();
     }, 1 * 1000);
@@ -18,4 +20,6 @@ module.exports = function(callback) {
   } catch (error) {
     clearInterval(interval);
   }
-};
+}
+
+module.exports = sysUsagePolling;
