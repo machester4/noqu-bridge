@@ -1,5 +1,6 @@
 const { totalmem, cpus } = require("os");
 const pidusage = require("pidusage");
+const emit = require("../../lib/emitter");
 const { pollTypes } = require("../../lib/constants");
 
 function sysUsagePolling(io) {
@@ -10,7 +11,7 @@ function sysUsagePolling(io) {
         const mem = (memory / 1024 / 1024).toFixed(2);
         const totalMem = (totalmem / 1024 / 1024).toFixed(2);
         const data = { cpu, cpuModel, mem, totalMem };
-        io.emit(pollTypes.SYSTEM, data);
+        emit(pollTypes.SYSTEM, data);
       });
       pidusage.clear();
     }, 1 * 1000);

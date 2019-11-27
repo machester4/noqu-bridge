@@ -4,21 +4,23 @@ const poll = require("../polling");
 // Socket.io instance
 let io;
 
-function initEvents(queues) {
+function initEvents() {
   io.on("connection", socket => {
     console.log("conectado");
   });
 }
 
-function init(server, queues) {
+function init(server) {
   if (!!!io) {
     // Create single Socket.io instance
     io = socketIo(server);
-    // Init polling
-    poll(io, queues);
     // Socket.io events
-    initEvents(queues);
+    initEvents();
   }
 }
 
-module.exports = init;
+module.exports = {
+  io,
+  initSocket: init,
+  initPolling: poll
+};
