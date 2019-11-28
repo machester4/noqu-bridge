@@ -7,33 +7,27 @@ async function getJobCounts(queue, type) {
 }
 
 // For modify only first page of Queue
-async function getLastTenJob(queue, type) {
-  const result = await queue.getJobs(type, 0, 10);
+async function getJobs(queue, type, start = 0, end = 10) {
+  const result = await queue.getJobs(type, start, end);
   return result;
 }
 
 // Fire when Queue event
 async function getQueueInfo(queue) {
   const name = queue.name;
-  const header = await Promise.all(
+  const statuses = await Promise.all(
     jobTypes.map(type => getJobCounts(queue, type))
   );
-  const jobs = await Promise.all(
-    jobTypes.map(type => getLastTenJob(queue, type))
-  );
-  const body = jobTypes.reduce(
-    (prevObj, job, i) => ({ ...prevObj, [job]: jobs[i] }),
-    {}
-  );
-  return { name, header, body };
+  return { name, statuses };
 }
 
-function getQueuesParsed(queues) {
+function getQueues(queues) {
   return Promise.all(queues.map(getQueueInfo));
 }
 
 module.exports = {
   getJobCounts,
-  getLastTenJob,
-  getQueuesParsed
+  getJobs,
+  getQueueInfo,
+  getQueues
 };
