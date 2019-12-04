@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
-const { getQueues, getJobs } = require("./src/lib/getters");
-const { initSocket, initPolling } = require("./src/lib");
+const { getQueues, getJobs, sysUsage } = require("./src/lib");
 
 module.exports = function(app, prefix, queues, authenticator) {
   const reactAppPrefix = "/noqu-board";
@@ -12,8 +11,6 @@ module.exports = function(app, prefix, queues, authenticator) {
 
   // Board route
   router.get("/", function(req, res) {
-    // Init polling to board
-    initSocket(req.socket.server);
     // Response with noqu-board build
     res.sendFile(path.join(__dirname + "/src/board/index.html"));
   });
@@ -23,13 +20,42 @@ module.exports = function(app, prefix, queues, authenticator) {
     const response = await getQueues(queues);
     res.json(response);
   });
+
   router.get("/:queue/:job_type", async function(req, res) {
     const { queue, job_type } = req.params;
     const { start, end } = req.query;
+
     const exist = queues.find(qu => qu.name === queue);
+
     if (exist) {
       const response = await getJobs(exist, job_type, start, end);
       res.json(response);
+    } else {
+      res.status(500);
+      res.json({ ok: false });
+    }
+  });
+
+  router.get("/poll", async function(req, res) {
+    const sysStatus = await sysUsage();
+    const queuesStatus = await getQueues(queues);
+    res.json({ sysStatus, queuesStatus });
+  });
+
+  router.get("/poll/:queue/:job_type", async function(req, res) {
+    const { queue, job_type } = req.params;
+    const { start, end } = req.query;
+
+    const sysStatus = await sysUsage();
+    const queuesStatus = await getQueues(queues);
+    const exist = queues.find(qu => qu.name === queue);
+
+    if (exist) {
+      const response = await getJobs(exist, job_type, start, end);
+      res.json({ sysStatus, queuesStatus, polling: response });
+    } else {
+      res.status(500);
+      res.json({ ok: false });
     }
   });
 
@@ -38,6 +64,4 @@ module.exports = function(app, prefix, queues, authenticator) {
 
   app.use(reactAppPrefix, express.static(path.join(__dirname, "/src/board")));
   app.use(prefix, router);
-
-  initPolling(queues);
 };
