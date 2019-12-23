@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const { getQueues, getJobs, sysUsage } = require("./src/lib");
+const init = require("./src/lib/socket");
 
 module.exports = function(app, prefix, queues, authenticator) {
   const reactAppPrefix = "/noqu-board";
@@ -11,6 +12,8 @@ module.exports = function(app, prefix, queues, authenticator) {
 
   // Board route
   router.get("/", function(req, res) {
+    // Init socket instance
+    init(req.socket.server, queues);
     // Response with noqu-board build
     res.sendFile(path.join(__dirname + "/src/board/index.html"));
   });
